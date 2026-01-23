@@ -20,9 +20,9 @@
                 Auth
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/basic/pages/auth/login.php">Login</a></li>
+                <li><a class="dropdown-item" href="/basic/?page=login">Login</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/basic/pages/auth/register.php">Register</a></li>
+                <li><a class="dropdown-item" href="/basic/?page=register">Register</a></li>
 
             </ul>
             </li>

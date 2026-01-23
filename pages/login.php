@@ -1,7 +1,4 @@
-<?php
-include '../include/header.inc.php';
-include '../include/navbar.inc.php';
-?>
+
 <form class="col-md-6 col-lg-6 col-sm-6 col-xl-6 col-xs-6 mx-auto my-5">
   <h3>Login Page</h3>
   <div class="mb-3">
@@ -21,6 +18,4 @@ include '../include/navbar.inc.php';
 
 </form>
 
-<?php
-include '../include/footer.inc.php';
-?>
+
