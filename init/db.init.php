@@ -1,7 +1,7 @@
 <?php
 
 $host = 'localhost';
-$datab = 'php-lesson-private-db';
+$db = 'php-lesson-private-db';
 $username = 'root';
 $password = '';
 $port = 3306;
