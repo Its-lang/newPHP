@@ -1,6 +1,4 @@
 <?php
-include './include/header.inc.php';
-include './include/navbar.inc.php';
 require_once './init/init.php';
 
 $nameError = $usernameError = $passwdError = $confirmpasswordError = '';
@@ -35,7 +33,7 @@ if (isset($_POST['username'], $_POST['password'], $_POST['confirmpassword'], $_P
 
         if (registerUser($name, $username, $password)) {
 
-            $name = $username = ''; 
+            $name = $username = '';
 
             echo '<div class="alert alert-success" role="alert">
                     register success!

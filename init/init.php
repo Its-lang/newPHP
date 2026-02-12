@@ -1,4 +1,5 @@
 <?php
+$baseUrl = '/basic/';
 
 session_start();
 require_once './init/db.init.php';
