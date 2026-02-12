@@ -1,41 +1,33 @@
 <?php
 
-// Simple variables for password change
 $oldPassword = $newPassword = $confirmNewPassword = '';
 $oldPasswordErr = '';
 $newPasswordErr = '';
 
-// Handle password change
 if (isset($_POST['changePassword'])) {
     
     $oldPassword = $_POST['oldPassword'];
     $newPassword = $_POST['newPassword'];
     $confirmNewPassword = $_POST['confirmNewPassword'];
 
-    // Check old password
     if (empty($oldPassword)) {
         $oldPasswordErr = 'Please enter old password';
     }
 
-    // Check new password
     if (empty($newPassword)) {
         $newPasswordErr = 'Please enter new password';
     }
 
-    // Check if passwords match
     if ($newPassword != $confirmNewPassword) {
         $newPasswordErr = 'Passwords do not match';
     }
 
-    // If no errors, change password
     if (empty($oldPasswordErr) && empty($newPasswordErr)) {
         
-        // Verify old password is correct
         if (isUserHasPassword($oldPassword)) {
             
-            // Set new password
             if (setUserNewPassword($newPassword)) {
-                // Logout user after password change
+            
                 unset($_SESSION['user_id']);
                 echo '<div class="alert alert-success">Password changed successfully! <a href="./?page=login">Login again</a></div>';
             } else {

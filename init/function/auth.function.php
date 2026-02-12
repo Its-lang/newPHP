@@ -126,17 +126,13 @@ function setUserNewPassword($password)
 {
     global $conn;
 
-    // Get current user ID from session
     $user_id = $_SESSION['user_id'];
 
-    // Update password in database
     $query = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
     $query->bind_param('si', $password, $user_id);
     $query->execute();
 
-    // Check if update was successful
     if ($conn->affected_rows > 0 || $conn->affected_rows === 0) {
-        // affected_rows = 0 means password is same as old one, but query executed successfully
         return true;
     }
 
@@ -147,10 +143,8 @@ function isUserHasPassword($password)
 {
     global $conn;
 
-    // Get current user ID from session
     $user_id = $_SESSION['user_id'];
 
-    // Check if password matches
     $query = $conn->prepare("SELECT * FROM users WHERE id = ? AND password = ?");
     $query->bind_param('is', $user_id, $password);
     $query->execute();
