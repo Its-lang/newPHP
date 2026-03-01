@@ -6,8 +6,8 @@ include './include/header.inc.php';
 include './include/navbar.inc.php';
 
 
-$available_pages = ['login', 'register','logout' ,'dashboard'];
-$login_in_page = ['dashboard'];
+$available_pages = ['login', 'register','logout' ,'dashboard', 'profile'];
+$login_in_page = ['dashboard', 'profile'];
 $non_login_in_page = ['login', 'register'];
 
 $page = '';
