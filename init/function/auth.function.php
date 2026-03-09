@@ -7,10 +7,11 @@ function isAdmin(){
     }
     return false;
 }
+
 function isUserHasPassword($passwd){
     global $conn;
     $user = handleUserlogin();
-    $query = $conn->prepare('SELECT * FROM tbl_users WHERE id = ? AND passwd = ?');
+    $query = $conn->prepare('SELECT * FROM users WHERE id = ? AND password = ?');
     $query->bind_param('ds', $user->id, $passwd);
     $query->execute();
     $result = $query->get_result();
@@ -38,7 +39,7 @@ function changeProfileImage($image){
     if($image_path && $user->photo){
         unlink($user->photo);
     }
-    $query = $conn->prepare('UPDATE tbl_users SET photo = ? WHERE id = ?');
+    $query = $conn->prepare('UPDATE users SET photo = ? WHERE id = ?');
     $query->bind_param('sd', $image_path, $user->id);
     $query->execute();
     if($conn->affected_rows){
@@ -52,7 +53,7 @@ function deleteProfileImage(){
     if($user->photo){
         unlink($user->photo);
     }
-    $query = $conn->prepare('UPDATE tbl_users SET photo = NULL WHERE id = ?');
+    $query = $conn->prepare('UPDATE users SET photo = NULL WHERE id = ?');
     $query->bind_param('d', $user->id);
     $query->execute();
     if($conn->affected_rows){
@@ -132,7 +133,7 @@ function loginUser($username, $password){
 }
 
 
-function usrnameExists($username){
+function usernameExist($username){
     
     global $conn;
 

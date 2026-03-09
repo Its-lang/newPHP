@@ -2,11 +2,12 @@
 
 require_once './init/init.php';
 $user = handleUserlogin();
+$isAdmin = isAdmin();
 include './include/header.inc.php';
 include './include/navbar.inc.php';
 
 
-$available_pages = ['login', 'register','logout' ,'dashboard', 'profile'];
+$available_pages = ['login', 'register','logout' ,'dashboard', 'profile','user/create', 'user/list'];
 $login_in_page = ['dashboard', 'profile'];
 $non_login_in_page = ['login', 'register'];
 
