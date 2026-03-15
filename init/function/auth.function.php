@@ -12,7 +12,7 @@ function isUserHasPassword($passwd){
     global $conn;
     $user = handleUserlogin();
     $query = $conn->prepare('SELECT * FROM users WHERE id = ? AND password = ?');
-    $query->bind_param('ds', $user->id, $passwd);
+    $query->bind_param('is', $user->id, $passwd);
     $query->execute();
     $result = $query->get_result();
     if($result->num_rows){
@@ -24,7 +24,7 @@ function setUserNewPassword($passwd){
     global $conn;
     $user = handleUserlogin();
     $query = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
-    $query->bind_param('sd',$passwd,$user->id);
+    $query->bind_param('si', $passwd, $user->id);
     $query->execute();
     if($conn->affected_rows){
         return true;
@@ -40,7 +40,7 @@ function changeProfileImage($image){
         unlink($user->photo);
     }
     $query = $conn->prepare('UPDATE users SET photo = ? WHERE id = ?');
-    $query->bind_param('sd', $image_path, $user->id);
+    $query->bind_param('si', $image_path, $user->id);
     $query->execute();
     if($conn->affected_rows){
         return true;
@@ -54,7 +54,7 @@ function deleteProfileImage(){
         unlink($user->photo);
     }
     $query = $conn->prepare('UPDATE users SET photo = NULL WHERE id = ?');
-    $query->bind_param('d', $user->id);
+    $query->bind_param('i', $user->id);
     $query->execute();
     if($conn->affected_rows){
         return true;
@@ -79,17 +79,35 @@ function uploadImage($image)
         throw new Exception('File extension is not allowed!');
     }
 
-    if ($error !== 0) {
-        throw new Exception('Unknown error occurred!');
+    if ($error !== UPLOAD_ERR_OK) {
+        $errors = [
+            UPLOAD_ERR_INI_SIZE   => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+            UPLOAD_ERR_FORM_SIZE  => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+            UPLOAD_ERR_PARTIAL    => 'The uploaded file was only partially uploaded.',
+            UPLOAD_ERR_NO_FILE    => 'No file was uploaded.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+            UPLOAD_ERR_EXTENSION  => 'A PHP extension stopped the file upload.',
+        ];
+        $message = $errors[$error] ?? 'Unknown upload error.';
+        throw new Exception($message);
     }
 
     if ($img_size > 500000) {
         throw new Exception('File size is too large!');
     }
 
+    if (!is_dir($dir) && !mkdir($dir, 0755, true)) {
+        throw new Exception('Failed to create upload directory.');
+    }
+
     $new_image_name = uniqid("PI-") . '.' . $image_lowercase_ex;
     $image_path = $dir . $new_image_name;
-    move_uploaded_file($tmp_name, $image_path);
+
+    if (!move_uploaded_file($tmp_name, $image_path)) {
+        throw new Exception('Failed to move uploaded file. Check directory permissions.');
+    }
+
     return $image_path;
 }
 function handleUserlogin(){

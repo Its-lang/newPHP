@@ -28,22 +28,21 @@ if (isset($_POST['username'], $_POST['password'], $_POST['confirmpassword'], $_P
     if ($password !== $cf_password) {
         $passwdError = 'PASSWORD_DOES_NOT_MATCH';
     }
-    if (usrnameExists($username)) {
+    if (usernameExist($username)) {
         $usernameError = 'USERNAME_ALLREADY_EXISTS';
     }
     if (empty($nameError) && empty($usernameError) && empty($passwdError)) {
 
         if (registerUser($name, $username, $password)) {
 
-            $name = $username = ''; 
+            $name = $username = '';
 
             echo '<div class="alert alert-success" role="alert">
-                    register success!
-                    <a href = "./?page = login" class = "alert-link">
+                    Register success! <a href="./?page=login" class="alert-link">Login</a>
                   </div>';
         } else {
-            echo '<div class="alert alert-success" role="alert">
-                    A simple success alert—check it out!
+            echo '<div class="alert alert-danger" role="alert">
+                    Register failed. Please try again.
                   </div>';
         }
     }

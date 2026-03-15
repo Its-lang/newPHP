@@ -9,9 +9,9 @@ function createUser($name, $username, $password, $photo){
     $query = $conn->prepare('INSERT INTO users (name,username,password,photo) VALUES (?,?,?,?)');
     $query->bind_param('ssss', $name,$username, $password,$image_path);
     $query->execute();
-    if($query->get_result()){
+    if ($query->affected_rows > 0) {
         return true;
-    } 
+    }
     return false;
 }
 

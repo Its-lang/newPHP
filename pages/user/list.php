@@ -24,8 +24,8 @@
                         <th>' . $count . '</th>
                         <th>
                             <img src="' . ($row->photo ?? './assets/images/emptyuser.png') . '"
-                                 class="rounded img-thumbnail" style="max: width 200px;"    
-                            "/>
+                                 class="rounded img-thumbnail" style="max-width: 200px;"    
+                            />
                         </th>
                         <th>' . $row->name . '</th>
                     </tr>';

@@ -6,6 +6,6 @@
         session_unset();
     }
 
-    header('Location: ./?pages=login');
+    header('Location: ./?page=login');
 
 ?>

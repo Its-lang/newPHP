@@ -64,8 +64,12 @@ if(isset($_POST['deletePhoto'])){
         <form method="post" action="./?page=profile" enctype="multipart/form-data">
             <div class="d-flex justify-content-center">
                 <input name="photo" type="file" id="profileUpload" hidden>
+                <?php
+                $currentUser = handleUserlogin();
+                $photoSrc = ($currentUser && !empty($currentUser->photo)) ? $currentUser->photo : './assets/images/emptyuser.png';
+                ?>
                 <label role="button" for="profileUpload">
-                    <img src="<?php echo handleUserlogin()->photo ?? './assets/images/emptyuser.png' ?>" 
+                    <img src="<?php echo $photoSrc ?>" 
                     class="rounded img-thumbnail" style="max-width: 200px;">
                 </label>
             </div>

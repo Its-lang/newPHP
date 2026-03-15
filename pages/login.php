@@ -8,7 +8,7 @@ if (isset($_POST['username'], $_POST['password'])) {
     $password = trim($_POST['password']);
 
     if (empty($password)) {
-        $passwdError = "PASSWORD_IS_REQUIRED";
+        $passwordError = "PASSWORD_IS_REQUIRED";
     }
 
     if (empty($username)) {
@@ -21,9 +21,10 @@ if (isset($_POST['username'], $_POST['password'])) {
 
       if($user !== false){
         $_SESSION['user_id'] = $user -> id;
-        header('Location: ./?page = dashboard');
+        header('Location: ./?page=dashboard');
+        exit;
       }else{
-        $username = 'Username or password is incorrect';
+        $usernameError = 'Username or password is incorrect';
       }
     }
   }
