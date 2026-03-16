@@ -22,4 +22,22 @@ function getUser(){
     $result = $query -> get_result();
     return $result ;
 }
+
+function readUser($id){
+    global $conn;
+    $query = $conn -> prepare('SELECT * FROM users WHERE id = ?');
+    $query-> bind_param('i', $id);
+    $query -> execute();
+    $result = $query->get_result();
+    return $result->fetch_object();
+}
+
+function deleteUser($id){
+    global $conn;
+    $query = $conn -> prepare('DELETE * FROM users WHERE id = ?');
+    $query-> bind_param('i', $id);
+    $query -> execute();
+     $result = $query->get_result();
+    return $result->fetch_object();
+}
 ?>
