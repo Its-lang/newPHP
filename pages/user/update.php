@@ -1,12 +1,17 @@
 <?php
-$id = $_GET["id"];
+
+$id = $_GET['id'];
 $targetUser = readUser($id);
-if ($targetUser = null || $targetUser->level == "admin") {
-    header("Location: ./?page=user/list");
+if($targetUser == null || $targetUser->level == 'admin'){
+    header('Location: ./?page=user/list');
+
 }
 
 $nameError = $usernameError = $passwdError = '';
-$name = $username = '';
+
+$name = $targetUser -> name;
+$username = $targetUser -> username;
+$photo = $targetUser -> photo;
 
 if (isset($_POST['username'], $_POST['password'], $_POST['name'], $_FILES['photo'])) {
     $photo = $_FILES['photo'];
@@ -16,66 +21,44 @@ if (isset($_POST['username'], $_POST['password'], $_POST['name'], $_FILES['photo
     if (empty($name)) {
         $nameError = "Name is required";
     }
-    if (empty($passwd)) {
-        $passwdError = "Password is required";
-    }
     if (empty($username)) {
         $usernameError = "Username is required";
     }
-    if (strlen($passwd) < 6 || strlen($passwd) > 25) {
+    if (!empty($passwd) && (strlen($passwd) < 6 || strlen($passwd) > 25)) {
         $passwdError = "Password must be at least 6 characters";
     }
-    if ($username !== $username) {
+    if ($targetUser->username !== $username && usernameExist($username)) {
         $usernameError = 'Username is currently unavailable!';
     }
-    // try {
-    //     if (empty($nameError) && empty($usernameError) && empty($passwdError)) {
-    //         if (createUser($name, $username, $passwd, $photo)) {
-    //             $name = $username = '';
-    //             echo '<div class="alert alert-success" role="alert">
-    //              Created successful! <a href="./?page=update/list">CLICK LIST</a>
-    //             </div>';
-    //         } else {
-    //             echo '<div class="alert alert-danger" role="alert">
-    //              Create fail!
-    //             </div>';
-    //         }
-
-    //     }
-    // } catch (Exception $e) {
-    //     echo '<div class="alert alert-danger" role="alert">
-    //              ' . $e->getMessage() . '
-    //             </div>';
-    // }
+    try{
+    if(empty($nameError) && empty($usernameError) && empty($passwdError)){
+        if(updateUser($id, $name, $username, $passwd, $photo)){
+            echo '<div class="alert alert-success" role="alert">
+                    User updated successfully! <a href="./?page=user/list" class="alert-link">Go back to list</a>
+                </div>';
+            $targetUser = readUser($id);
+        } else {
+            echo '<div class="alert alert-danger" role="alert">
+                    Failed to update user!
+                </div>';
+        }
+    }} catch(Exception $e){
+        echo '<div class="alert alert-danger" role="alert">
+                 '. $e -> getMessage().'
+                </div>';
+    }
 }
 ?>
 
-<form method="post" action="./?page=user/update&id=<?php echo '?id' ?>" class="col-md-8 col-lg-6 mx-auto" enctype="multipart/form-data">
+<form method="post" action="./?page=user/update&id=<?php echo $id?>" class="col-md-8 col-lg-6 mx-auto" enctype="multipart/form-data">
     <h3>Update User</h3>
-    <div class="d-flex flex-column align-items-center mb-3">
-        <input name="photo" type="file" id="profileUpload" hidden accept="image/jpeg,image/png">
-        <?php
-        $currentUser = handleUserlogin();
-        $photoSrc = ($currentUser && !empty($currentUser->photo)) ? $currentUser->photo : './assets/images/emptyuser.png';
-        ?>
-        <label role="button" for="profileUpload" class="mb-2">
-            <img id="profilePreview" src="<?php echo $photoSrc ?>" class="rounded img-thumbnail"
-                style="max-width: 200px;">
+    <div class="d-flex justify-content-center">
+        <input name="photo" type="file" id="profileUpload" hidden>
+        <label role="button" for="profileUpload">
+            <img src="<?php echo $targetUser->photo ?? './assets/images/emptyuser.png' ?>"
+                class="rounded img-thumbnail" style="max-width: 200px;">
         </label>
-        <small class="text-muted">Click the image to select a photo (jpg/png, max 500KB).</small>
     </div>
-
-    <script>
-        document.getElementById('profileUpload').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('profilePreview').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
-    </script>
     <div class="mb-3">
         <label class="form-label">Name</label>
         <input name="name" value="<?php echo $name; ?>" type="text" class="form-control

@@ -1,77 +1,72 @@
 <?php
-include './include/header.inc.php';
-include './include/navbar.inc.php';
-require_once './init/init.php';
 
 $nameError = $usernameError = $passwdError = $confirmpasswordError = '';
 $name = $username = '';
-
 if (isset($_POST['username'], $_POST['password'], $_POST['confirmpassword'], $_POST['name'])) {
-
     $name = trim($_POST['name']);
     $username = trim($_POST['username']);
-    $password = $_POST['password'];
-    $cf_password = $_POST['confirmpassword'];
-
+    $passwd = trim($_POST['password']);
+    $confirmpassword = trim($_POST['confirmpassword']);
     if (empty($name)) {
-        $nameError = "NAME_IS_REQUUIRED";
+        $nameError = "Name is required";
     }
-    if (empty($password)) {
-        $passwdError = "PASSWORD_IS_REQUIRED";
+    if (empty($passwd)) {
+        $passwdError = "Password is required";
     }
     if (empty($username)) {
-        $usernameError = "USERNAME_IS_REQUUIRED";
+        $usernameError = "Username is required";
     }
-    if (strlen($password) > 25 || strlen($password) < 6) {
-        $passwdError = 'PASSWORD_LENGTH_SHOULD_BE_6_TO_25';
+    if ($passwd !== $confirmpassword) {
+        $confirmpasswordError = "Password not match";
     }
-    if ($password !== $cf_password) {
-        $passwdError = 'PASSWORD_DOES_NOT_MATCH';
+    if (strlen($passwd) < 6 || strlen($passwd) > 25) {
+        $passwdError = "Password must be at least 6 characters";
     }
     if (usernameExist($username)) {
-        $usernameError = 'USERNAME_ALLREADY_EXISTS';
+        $usernameError = 'Usename is currently unavailable!';
     }
     if (empty($nameError) && empty($usernameError) && empty($passwdError)) {
-
-        if (registerUser($name, $username, $password)) {
-
+        if (registerUser($name, $username, $passwd)) {
             $name = $username = '';
-
             echo '<div class="alert alert-success" role="alert">
-                    Register success! <a href="./?page=login" class="alert-link">Login</a>
-                  </div>';
+    Registeration is successful! You can now <a href="./?page=login" class="alert-link">LOGIN</a>. Give it a click if you like.
+</div>';
         } else {
             echo '<div class="alert alert-danger" role="alert">
-                    Register failed. Please try again.
-                  </div>';
+  Please try again!
+</div>';
         }
+
     }
 }
 ?>
 
-<form method="post" action="./?page=register" class="col-md-8 col-lg-6 mx-auto">
-    <h3>Register</h3>
-    <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input name="name" value="<?php echo $name; ?>" type="text" class="form-control
+<body>
+
+
+    <form method="post" action="./?page=register" class="col-md-8 col-lg-6 mx-auto">
+        <h3>Register</h3>
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input name="name" value="<?php echo $name; ?>" type="text" class="form-control
             <?php echo empty($nameError) ? '' : 'is-invalid' ?>">
-        <div class="invalid-feedback"><?php echo $nameError; ?></div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Username</label>
-        <input name="username" value="<?php echo $username; ?>" type="text" class="form-control
+            <div class="invalid-feedback"><?php echo $nameError; ?></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input name="username" value="<?php echo $username; ?>" type="text" class="form-control
             <?php echo empty($usernameError) ? '' : 'is-invalid' ?>">
-        <div class="invalid-feedback"><?php echo $usernameError; ?></div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Password</label>
-        <input name="password" type="password" class="form-control
+            <div class="invalid-feedback"><?php echo $usernameError; ?></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input name="password" type="password" class="form-control
             <?php echo empty($passwdError) ? '' : 'is-invalid' ?>">
-        <div class="invalid-feedback"><?php echo $passwdError; ?></div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Confirm Password</label>
-        <input name="confirmpassword" type="password" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+            <div class="invalid-feedback"><?php echo $passwdError; ?></div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+            <input name="confirmpassword" type="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
