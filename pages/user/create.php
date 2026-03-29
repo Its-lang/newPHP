@@ -10,6 +10,7 @@ if (isset($_POST['username'], $_POST['password'], $_POST['name'], $_FILES['photo
     if (empty($name)) {
         $nameError = "Name is required";
     }
+    
     if (empty($passwd)) {
         $passwdError = "Password is required";
     }
